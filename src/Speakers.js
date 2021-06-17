@@ -2,22 +2,13 @@ import React, { useState, useEffect, useContext, useReducer } from "react"
 import SpeakerData from "./SpeakerData"
 import Speaker from "./Speaker"
 import { ConfigContext } from "./App"
+import speakersReducer from "./speakersReducer"
 
 export default function Speakers() {
   //   const [speakerList, setSpeakerList] = useState([])
   const [isLoading, setIsLoading] = useState(true)
   const [speakingSaturday, setSpeakingSaturday] = useState(true)
   const [speakingSunday, setSpeakingSunday] = useState(true)
-
-  function speakersReducer(state, action) {
-    switch (action.type) {
-      case "setSpeakerList": {
-        return action.payload
-      }
-      default:
-        return state
-    }
-  }
 
   const [speakerList, dispatch] = useReducer(speakersReducer, [])
   //   const [state, dispatch] = useReducer(reducer, initialState);
@@ -32,12 +23,17 @@ export default function Speakers() {
 
   const heartFavoriteHandler = (e, favoriteValue, id) => {
     e.preventDefault()
-    const filteredSpeakerList = speakerList.map((item) => {
-      if (item.id === id) {
-        return { ...item, favorite: favoriteValue }
-      } else return item
+    // const filteredSpeakerList = speakerList.map((item) => {
+    //   if (item.id === id) {
+    //     return { ...item, favorite: favoriteValue }
+    //   } else return item
+    // })
+    // dispatch({ type: "setSpeakerList", payload: filteredSpeakerList })
+
+    dispatch({
+      type: favoriteValue === true ? "favorite" : "unfavorite",
+      payload: id,
     })
-    dispatch({ type: "setSpeakerList", payload: filteredSpeakerList })
   }
 
   const handleChangeSaturday = () => {
@@ -52,7 +48,7 @@ export default function Speakers() {
     : speakerList.filter(
         ({ sat, sun }) => (speakingSaturday && sat) || (speakingSunday && sun)
       )
-
+  console.log(speakerListFiltered)
   return (
     <div>
       {isLoading && <div>Loading...</div>}
