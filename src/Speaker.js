@@ -9,6 +9,8 @@ export default function Speaker({
   firstName,
   lastName,
   bio,
+  sat,
+  sun,
   onHeartFavoriteHandler,
 }) {
   return (
