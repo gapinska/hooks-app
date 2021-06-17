@@ -1,4 +1,11 @@
-import React, { useState, useEffect, useContext, useReducer } from "react"
+import React, {
+  useState,
+  useEffect,
+  useContext,
+  useReducer,
+  useCallback,
+  useMemo,
+} from "react"
 import SpeakerData from "./SpeakerData"
 import Speaker from "./Speaker"
 import { ConfigContext } from "./App"
@@ -21,7 +28,7 @@ export default function Speakers() {
     setIsLoading(false)
   }, [])
 
-  const heartFavoriteHandler = (e, favoriteValue, id) => {
+  const heartFavoriteHandler = useCallback((e, favoriteValue, id) => {
     e.preventDefault()
     // const filteredSpeakerList = speakerList.map((item) => {
     //   if (item.id === id) {
@@ -34,7 +41,7 @@ export default function Speakers() {
       type: favoriteValue === true ? "favorite" : "unfavorite",
       payload: id,
     })
-  }
+  }, [])
 
   const handleChangeSaturday = () => {
     setSpeakingSaturday(!speakingSaturday)
@@ -42,13 +49,15 @@ export default function Speakers() {
   const handleChangeSunday = () => {
     setSpeakingSunday(!speakingSunday)
   }
-
-  const speakerListFiltered = isLoading
-    ? []
-    : speakerList.filter(
+  const newSpeakersList = useMemo(
+    () =>
+      speakerList.filter(
         ({ sat, sun }) => (speakingSaturday && sat) || (speakingSunday && sun)
-      )
-  console.log(speakerListFiltered)
+      ),
+    [speakerList, speakingSaturday, speakingSunday]
+  )
+
+  const speakerListFiltered = isLoading ? [] : newSpeakersList
   return (
     <div>
       {isLoading && <div>Loading...</div>}

@@ -3,7 +3,7 @@ import ImageToggleOnScroll from "./ImageToggleOnScroll"
 import FavoriteBorderIcon from "@material-ui/icons/FavoriteBorder"
 import FavoriteIcon from "@material-ui/icons/Favorite"
 
-export default function Speaker({
+function Speaker({
   id,
   favorite,
   firstName,
@@ -29,3 +29,5 @@ export default function Speaker({
     </div>
   )
 }
+
+export default React.memo(Speaker)
