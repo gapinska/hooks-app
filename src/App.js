@@ -1,11 +1,25 @@
+import React from "react"
+import Home from "./Home"
 import Speakers from "./Speakers"
 import "./App.css"
 
-function App() {
+export const ConfigContext = React.createContext()
+
+const pageToShow = (pageName = "Speakers") => {
+  if (pageName === "Home") return <Home />
+  if (pageName === "Speakers") return <Speakers />
+  return <div>Not Found</div>
+}
+
+const configValue = {
+  showSpeakerSpeakingDays: true,
+}
+
+function App({ pageName }) {
   return (
-    <div className="App">
-      <Speakers />
-    </div>
+    <ConfigContext.Provider value={configValue}>
+      {pageToShow(pageName)}
+    </ConfigContext.Provider>
   )
 }
 

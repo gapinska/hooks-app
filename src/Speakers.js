@@ -1,12 +1,15 @@
-import React, { useState, useEffect } from "react"
+import React, { useState, useEffect, useContext } from "react"
 import SpeakerData from "./SpeakerData"
 import Speaker from "./Speaker"
+import { ConfigContext } from "./App"
 
 export default function Speakers() {
   const [speakerList, setSpeakerList] = useState([])
   const [isLoading, setIsLoading] = useState(true)
   const [speakingSaturday, setSpeakingSaturday] = useState(true)
   const [speakingSunday, setSpeakingSunday] = useState(true)
+
+  const context = useContext(ConfigContext)
 
   useEffect(() => {
     setSpeakerList(SpeakerData)
@@ -40,30 +43,33 @@ export default function Speakers() {
   return (
     <div>
       {isLoading && <div>Loading...</div>}
-      <div className="container">
-        <div>
-          <label>
-            <input
-              type="checkbox"
-              className="check-input"
-              onChange={handleChangeSaturday}
-              checked={speakingSaturday}
-            />{" "}
-            Saturday Speaker
-          </label>
+      {context.showSpeakerSpeakingDays === false ? null : (
+        <div className="container">
+          <div>
+            <label>
+              <input
+                type="checkbox"
+                className="check-input"
+                onChange={handleChangeSaturday}
+                checked={speakingSaturday}
+              />{" "}
+              Saturday Speaker
+            </label>
+          </div>
+          <div>
+            <label>
+              <input
+                type="checkbox"
+                className="check-input"
+                onChange={handleChangeSunday}
+                checked={speakingSunday}
+              />
+            </label>
+            Sunday Speaker
+          </div>
         </div>
-        <div>
-          <label>
-            <input
-              type="checkbox"
-              className="check-input"
-              onChange={handleChangeSunday}
-              checked={speakingSunday}
-            />
-          </label>
-          Sunday Speaker
-        </div>
-      </div>
+      )}
+
       {speakerListFiltered.map(
         ({ id, firstName, lastName, favorite, bio, sat, sun }) => (
           <Speaker
